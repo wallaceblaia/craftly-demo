@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Craftly</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f3ede2; color: #2b2722; margin: 0; }
+    header { padding: 16px 24px; background: #2b2722; color: #e8a33d; font-weight: 700; font-size: 22px; }
+    main { padding: 24px; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+    .card { background: #fff; border-radius: 10px; padding: 16px; }
+    #search { margin: 16px 24px 0; padding: 8px; width: 300px; }
+  </style>
+</head>
+<body>
+  <header>Craftly</header>
+  <input id="search" placeholder="Search handmade goods">
+  <main id="list"></main>
+  <script>
+    const token = localStorage.getItem('token');
+    async function load(q) {
+      const url = q ? '/api/products/search?q=' + q : '/api/products';
+      const items = await fetch(url).then((r) => r.json());
+      document.getElementById('list').innerHTML = items
+        .map((p) => `<div class="card"><h3>${p.name}</h3><p>${p.description}</p><b>$${p.price}</b><br><small>by ${p.maker}</small></div>`)
+        .join('');
+    }
+    document.getElementById('search').addEventListener('input', (e) => load(e.target.value));
+    load();
+  </script>
+</body>
+</html>
