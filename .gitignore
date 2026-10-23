@@ -1,3 +1,4 @@
 node_modules/
-craftly.db
+*.db
 uploads/
+.env
